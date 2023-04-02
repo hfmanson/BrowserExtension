@@ -43,7 +43,10 @@ public class NativeMessaging {
         JsonObject jsonObject = null;
         if ((len = readInt32()) != -1) {
             byte[] message = new byte[len];
-            System.in.read(message);
+            int bytesRead = 0;
+            while (bytesRead < len) {
+                bytesRead += System.in.read(message, bytesRead, len - bytesRead);
+            }
             String str = new String(message, "UTF-8");
             StringReader reader = new StringReader(str);
             JsonParser parser = Json.createParser(reader);
